@@ -10,7 +10,7 @@
 
 | Mục | Nội dung |
 |-----|----------|
-| Họ và tên | Doan Anh Quan |
+| Họ và tên | Đoàn Anh Quân |
 | Mã học viên | 2A202602803 |
 | Repo | https://github.com/DAQuan-VinAI/K4-L3A-DAY12-DoanAnhQuan-2A202602803-CloudServicesAndDeployment |
 
