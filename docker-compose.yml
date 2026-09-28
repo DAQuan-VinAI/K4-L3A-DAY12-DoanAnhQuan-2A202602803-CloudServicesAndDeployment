@@ -37,8 +37,10 @@ services:
 
   agent:
     build: .
+    # Dải cổng để `--scale agent=3` không tranh nhau cổng 8000 trên host;
+    # chạy 1 instance thì vẫn là localhost:8000.
     ports:
-      - "8000:8000"
+      - "8000-8002:8000"
     environment:
       AGENT_API_KEY: ${AGENT_API_KEY}
       REDIS_URL: redis://redis:6379/0
@@ -56,6 +58,23 @@ services:
       start_period: 10s
       retries: 3
     restart: unless-stopped
+
+  # Load balancer tùy chọn (phần mở rộng CP4), bật bằng:
+  #     docker compose --profile lb up -d --scale agent=3
+  nginx:
+    # Build config vào image thay vì bind-mount: Docker Desktop trên macOS
+    # thường không được quyền mount file nằm trong ~/Documents.
+    build:
+      context: ./nginx
+      dockerfile_inline: |
+        FROM nginx:1.27-alpine
+        COPY nginx.conf /etc/nginx/nginx.conf
+    profiles: ["lb"]
+    ports:
+      - "80:80"
+    depends_on:
+      agent:
+        condition: service_healthy
 
 volumes:
   redis-data:
