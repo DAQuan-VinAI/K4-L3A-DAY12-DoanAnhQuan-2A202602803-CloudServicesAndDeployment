@@ -2,8 +2,6 @@
 
 > **Bài làm cá nhân.** Trả lời bằng lời của chính bạn, dựa trên những gì bạn
 > quan sát được khi chạy code — không sao chép đáp án của người khác.
->
-> Cách trả lời: thay dòng `> *Câu trả lời của bạn*` bằng câu trả lời.
 > `grade.py` đếm số câu đã trả lời (15 điểm cho 10 câu).
 >
 > Họ và tên: Đoàn Anh Quân -  Mã học viên: 2A202602803
@@ -47,7 +45,7 @@ docker images | grep agent
 | Multi-stage | 297 MB |
 
 Phần chênh lệch dung lượng đến từ :
-- base image `python3.11` với đầy đủ gcc, header, thư viện ,...
+- base image `python:3.11` với đầy đủ gcc, header, thư viện ,...
 - COPY cả `venv/`, `tests/`, ...
 - cache của pip
 
@@ -61,7 +59,7 @@ layer nào được dùng lại từ cache, layer nào phải chạy lại? Nế
 `COPY . .` lên trước `RUN pip install` thì kết quả khác thế nào?
 
 - Sửa 1 ký tự thì `COPY requirements.txt, pip install, useradd, COPY --from=builder` dùng lại được cache, layer `COPY app` và `COPY utils` phải chạy lại.
-- Đặt `COPY ..` trước `RUN pip install` thì Docker huỷ cache từ layer đầu tiên thay đổi trở đi. `COPY..` thay đổi, kéo theo `pip install` chạy lại. Layer `COPY from=buider` cũng mất cache.
+- Đặt `COPY . .` trước `RUN pip install` thì Docker huỷ cache từ layer đầu tiên thay đổi trở đi. `COPY..` thay đổi, kéo theo `pip install` chạy lại. Layer `COPY from=builder` cũng mất cache.
 
 ---
 
@@ -125,4 +123,4 @@ Ghi lại **một** lỗi bạn gặp khi deploy lên cloud (build fail, health 
 timeout, sai REDIS_URL, app không đọc `$PORT`...): thông báo lỗi là gì, bạn
 tìm ra nguyên nhân bằng cách nào, và sửa ra sao?
 
-`railway.toml` có `startCommand = "uvicorn ... --port $PORT"`. Railway chạy lệnh này không qua shell nên `$PORT` không được thay giá trị, và uvicorn sẽ báo lỗi cổng không hợp lệ. Lỗi được phát hiện khi đọc lại cấu hình trước khi deploy. Cách sửa: bỏ `startCommand` để dùng `CMD ["sh", "-c", "exec uvicorn ... --port ${PORT:-8000}"]` trong Dockerfile.
+Lúc deploy lên cloud, nhờ đọc kĩ theo các bước và sự hướng dẫn của AI thì em không gặp lỗi gì cả.
